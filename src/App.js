@@ -1,36 +1,70 @@
+import { useState } from 'react';
 import './App.css';
+import Navbar from './components/Navbar';
+import TextForm from './components/TextForm';
+import About from './components/About';
+import Alert from './components/Alert';
+
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
+
+  const [darkMode, setdarkMode] = useState('light')
+  const [alert, setAlert] = useState(null)
+
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type
+    })
+    setTimeout(() => {
+      setAlert(null);
+    }, 2000);
+  }
+
+  /*const removeBodyClass = () => {
+    document.body.classList.remove('bg-light')
+    document.body.classList.remove('bg-dark')
+    document.body.classList.remove('bg-success')
+    document.body.classList.remove('bg-warning')
+    document.body.classList.remove('bg-danger')
+    document.body.classList.remove('bg-primary')
+  }*/
+
+  const toggleMode = (cls) => {
+    /*removeBodyClass();
+    document.body.classList.add('bg-' + cls);*/
+    if (darkMode === 'light') {
+      setdarkMode('dark');
+      document.body.style.backgroundColor = '#343a40';
+      document.body.style.color = 'white';
+      showAlert("Dark mode has been enable", 'success')
+
+      // setInterval(() => {
+      //   document.title = 'TextUtils is Amazing Mode';
+      // }, 2000);
+      // setInterval(() => {
+      //   document.title = 'Install textUtils now';
+      // }, 4000);
+    }
+    else {
+      setdarkMode('light');
+      document.body.style.backgroundColor = 'white';
+      document.body.style.color = 'black';
+      showAlert("Light mode has been enable", 'success');
+    }
+  }
+
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">TextUtils</a>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/">Home</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">About</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">Services</a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="/">Contact</a>
-              </li>
-            </ul>
-            <form className="d-flex" role="search">
-              <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-outline-success" type="submit">Search</button>
-            </form>
-          </div>
-        </div>
-      </nav>
+      <Router>
+        <Navbar title="TextUtils" mode={darkMode} toggleMode={toggleMode} contactText="Contact Us" />
+        <Alert alert={alert} />
+        <Routes>
+          <Route exact path="/" element={<TextForm heading="Use our TextUtils" mode={darkMode} showAlert={showAlert} />} />
+          <Route path="/about" element={<About mode={darkMode} />} />
+        </Routes>
+      </Router>
     </>
   );
 }
