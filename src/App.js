@@ -62,7 +62,7 @@ function App() {
         <Alert alert={alert} />
         <Routes>
           <Route exact path="/" element={<TextForm heading="Use our TextUtils" mode={darkMode} showAlert={showAlert} />} />
-          <Route path="/about" element={<About mode={darkMode} />} />
+          <Route exact path="/about" element={<About mode={darkMode} />} />
         </Routes>
       </Router>
     </>
